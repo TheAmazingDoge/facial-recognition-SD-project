@@ -1,10 +1,33 @@
 <script>
-	export let name;
+	import { onMount } from 'svelte';
+
+	let portName = 'COm3';
+
+	function connectSerial() {
+		window.electron.send('connect-serial', portName);
+	}
+	function startBluetoothScan() {
+		window.electron.send('start-bluetooth-scan');
+	}
+	function stopBluetoothScan() {
+		window.electron.send('stop-bluetooth-scan');
+	}
+
+	onMount(() => {
+		window.electron.on('serial-data', (data) => {
+			console.log('Received data:', data);
+		});
+		window.electron.on('bluetooth-devices', (devices) => {
+			console.log('Bluetooth devices:', devices);
+		});
+	})
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<h1>Facial Recognition Software UI</h1>
+  	<button on:click={connectSerial}>Connect Serial</button>
+  	<button on:click={startBluetoothScan}>Start Bluetooth Scan</button>
+  	<button on:click={stopBluetoothScan}>Stop Bluetooth Scan</button>
 </main>
 
 <style>

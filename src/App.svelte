@@ -1,24 +1,32 @@
 <script>
 	import { onMount } from 'svelte';
 
-	let portName = 'COm3';
+	let portName = 'COM3';
+	let videoFeed = '';
+	let aiResult = '';
 
 	function connectSerial() {
+		console.log('Connecting to serial port:', portName);
 		window.electron.send('connect-serial', portName);
-	}
-	function startBluetoothScan() {
-		window.electron.send('start-bluetooth-scan');
-	}
-	function stopBluetoothScan() {
-		window.electron.send('stop-bluetooth-scan');
 	}
 
 	onMount(() => {
-		window.electron.on('serial-data', (data) => {
+		window.electron.receive('serial-data', (data) => {
 			console.log('Received data:', data);
 		});
-		window.electron.on('bluetooth-devices', (devices) => {
-			console.log('Bluetooth devices:', devices);
+		window.electron.receive('serial-error', (error) => {
+			console.log('Serial error:', error);
+		});
+		window.electron.receive('ai-result', (result) => {
+			//This is in case it is not the original person to set up the
+			//device. It can be an error if we need it to be
+			console.log('AI Result:', result);
+		});
+		window.electron.receive('open-door', (feed) => {
+			//This is in case it is the original person to set up the
+			//device. It can be whatever we want it to be. This will be if the AI
+			//detects the correct person.
+			console.log('open door or sum');
 		});
 	})
 </script>
@@ -26,8 +34,6 @@
 <main>
 	<h1>Facial Recognition Software UI</h1>
   	<button on:click={connectSerial}>Connect Serial</button>
-  	<button on:click={startBluetoothScan}>Start Bluetooth Scan</button>
-  	<button on:click={stopBluetoothScan}>Stop Bluetooth Scan</button>
 </main>
 
 <style>

@@ -1,8 +1,8 @@
-const { SerialPort } = require('serialport');
-const { ipcMain } = require('electron');
-const { noble } = require('noble');
+import { SerialPort } from 'serialport';
+import { ipcMain }  from 'electron' ;
 
 let serialPort;
+let mainWindow;
 
 //Serial Connection (USB)
 function connectSerial(port) {
@@ -21,36 +21,37 @@ function connectSerial(port) {
 
     serialPort.on('error', (err) => {
         console.error('Serial Port Error:', err.message);
+        mainWindow.webContents.send('serial-error', err.message);
     });
 }
+
+function processRecievedData(data) {
+    console.log('Processing data:', data);
+    try{
+        const parsedData = JSON.parse(data);
+        console.log('Parsed data:', parsedData);
+        if(parsedData.type === 'video-feed') {
+            mainWindow.webContents.send('video-feed', parsedData.data);
+        } else if(parsedData.type === 'ai-result') {
+            if(parsedData.data === 'owner') {
+                mainWindow.webContents.send('open-door', parsedData.data);
+            } else {
+                mainWindow.webContents.send('ai-result', parsedData.data);
+            }
+        }
+    } catch (error) {
+        console.error('Error processing data:', error);
+    }
+}
+
 
 ipcMain.on('connect-serial', (event, port) => {
     connectSerial(port);
 });
 
-//Bluetooth Connection
+function initializeDeviceCommunication(win) {
+    mainWindow = win;
+};
 
-noble.on('stateChange', (state) => {
-    if (state === 'poweredOn') {
-        noble.startScanning();
-    } else {
-        noble.stopScanning();
-    }
-});
-
-noble.on('discover', (peripheral) => {
-    console.log('Discovered:', peripheral.advertisement.localName);
-
-    // Send discovered device to renderer process
-    mainWindow.webContents.send('bluetooth-discovered', peripheral.advertisement.localName);
-});
-
-ipcMain.on('start-bluetooth-scan', () => {
-    noble.startScanning();
-});
-
-ipcMain.on('stop-bluetooth-scan', () => {
-    noble.stopScanning();
-});
-
-module.exports = { connectSerial };
+export { connectSerial };
+export { initializeDeviceCommunication };

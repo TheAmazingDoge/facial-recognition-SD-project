@@ -1,7 +1,8 @@
 import { app, BrowserWindow } from "electron";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import "./device-communication.js";
+import { initializeDeviceCommunication } from "./src/device-communication.js";
+import "./src/device-communication.js";
 
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -14,10 +15,13 @@ app.on("ready", () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: join(__dirname, "preload.js"),
+      preload: join(__dirname, "src/preload.js"),
     },
   });
 
-  mainWindow.loadFile(join(__dirname, "index.html"));
+  mainWindow.loadFile(join(__dirname, "public/index.html"));
   mainWindow.webContents.openDevTools();
+
+  // Initialize device communication
+  initializeDeviceCommunication(mainWindow);
 });

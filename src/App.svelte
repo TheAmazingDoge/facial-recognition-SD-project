@@ -1,5 +1,13 @@
 <script>
 	import { onMount } from 'svelte';
+    import SignIn from './SignIn.svelte';
+	import { isSignedIn } from './stores.js';
+	import MainPage from './MainPage.svelte';
+
+	let signedIn;
+	isSignedIn.subscribe(value => {
+		signedIn = value;
+	});
 
 	let portName = 'COM3';
 	let videoFeed = '';
@@ -32,8 +40,11 @@
 </script>
 
 <main>
-	<h1>Facial Recognition Software UI</h1>
-  	<button on:click={connectSerial}>Connect Serial</button>
+	{#if signedIn}
+		<MainPage />
+	{:else}
+		<SignIn />
+	{/if}
 </main>
 
 <style>
@@ -42,13 +53,6 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
 	}
 
 	@media (min-width: 640px) {

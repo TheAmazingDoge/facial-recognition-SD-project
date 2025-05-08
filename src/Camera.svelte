@@ -39,7 +39,6 @@
   {:else if connectionStatus === 'connected'}
   <img id="camera-feed" src={cameraFeed} alt="Camera Feed" />
   {/if}
-  <button class = "button" on:click={handleSignOut}>Sign Out</button>
 </main>
 
 <style>
@@ -79,30 +78,5 @@
 
   .failed {
     background-color: #d0d0d0; /* Slightly darker gray for failed */
-  }
-  .button {
-    color: white;
-    background-color: #34495e; /* Slightly lighter than the nav background */
-    border: none;
-    padding: 0.7em 1.5em; /* Add more padding for a better button size */
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1em; /* Increase font size */
-    border-radius: 5px; /* Rounded corners for buttons */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
-}
-
-  .button:hover {
-    background-color: #1abc9c; /* Change color on hover */
-    transform: scale(1.05); /* Slightly enlarge the button on hover */
-  }
-
-  .button:active {
-      transform: scale(0.95); /* Slightly shrink the button when clicked */
-  }
-
-  .button:focus {
-      outline: none; /* Remove the default focus outline */
-      box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.5); /* Add a custom focus outline */
-  }
+  } 
 </style>

@@ -1,26 +1,17 @@
 <script>
 	import { Router, Route, Link, useLocation } from 'svelte-routing';
 	import { onMount } from 'svelte';
-	import { isSignedIn } from './stores.js';
+	import { isSignedIn, signOut } from './stores.js';
     import SignIn from './SignIn.svelte';
 	import Camera from './Camera.svelte';
 	import Users from './Users.svelte';
 	import Home from './Home.svelte';
-	import { navigate } from 'svelte-routing';
 
 
 	let currentPage = 'signin'
 	function navigateTo(page) {
         currentPage = page;
     }
-
-	const location = useLocation();
-
-	onMount(() => {
-        console.log("App.svelte loaded");
-        console.log('Current route:', $location.pathname); // Debugging
-    });
-
 
 	let signedIn;
 	isSignedIn.subscribe(value => {
@@ -32,6 +23,9 @@
 		}
 	});
 
+	function handleSignOut() {
+    signOut();
+  	}
 	
 	let portName = 'COM3';
 	let videoFeed = '';
@@ -69,6 +63,8 @@
         <button on:click={() => navigateTo('home')}>Home</button>
         <button on:click={() => navigateTo('camera')}>Camera</button>
         <button on:click={() => navigateTo('users')}>Users</button>
+		<div class = "spacer"></div>
+		<button on:click={handleSignOut}>Sign Out</button>
     </nav>
 {/if}
 

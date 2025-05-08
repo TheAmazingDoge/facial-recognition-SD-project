@@ -5,4 +5,5 @@ contextBridge.exposeInMainWorld('electron', {
   receive: (channel, func) => ipcRenderer.on(channel, (event, ...args) => func(...args)),
   signin: (credentials) => ipcRenderer.invoke('signin', credentials),
   addUser: (credentials) => ipcRenderer.invoke('addUser', credentials),
+  fetchUsers: () => ipcRenderer.invoke('fetchUsers'),
 });

@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3';
 import bcrypt from 'bcrypt';
-const db = new sqlite3.Database('C:/Users/eesco/OneDrive/Desktop/Senior Design Project/electron-app-svelte-seniordesign/project.db');
+const db = new sqlite3.Database('./project.db');
 
 function authenticateUser(username, password, callback) {
     console.log(`Authenticating user: ${username}`);
@@ -39,7 +39,19 @@ function addUser(username, password, callback) {
       });
     });
   }
-  
+
+async function getUsersFromDatabase() {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT username FROM Users', (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+export { getUsersFromDatabase };
 export {db};
 export {authenticateUser};
 export {addUser};

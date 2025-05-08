@@ -39,8 +39,8 @@ import MessageModal from './MessageModal.svelte';
   <h1>Sign In</h1>
   <input id = "username" type="text" bind:value={username} placeholder="Username" />
   <input type="password" bind:value={password} placeholder="Password" />
-  <button on:click={handleSignIn}>Sign In</button>
-  <button on:click={openModal}>Add User</button>
+  <button class = "button" on:click={handleSignIn}>Sign In</button>
+  <button class = "button" on:click={openModal}>Add User</button>
 
   <Modal show={showModal} close={closeModal}>
     <AddUser />
@@ -49,6 +49,8 @@ import MessageModal from './MessageModal.svelte';
 </main>
 
 <style>
+  @import './style.css';
+
   main {
     text-align: center;
     padding: 1em;
@@ -57,7 +59,7 @@ import MessageModal from './MessageModal.svelte';
   }
 
   h1 {
-    color: #ff3e00;
+    color: #34495e;
     text-transform: uppercase;
     font-size: 2em;
     font-weight: 100;
@@ -68,13 +70,32 @@ import MessageModal from './MessageModal.svelte';
     margin: 0.5em 0;
     padding: 0.5em;
     width: 100%;
+    border: #34495e 1px solid;
+    
+  }
+  .button {
+    color: white;
+    background-color: #34495e; /* Slightly lighter than the nav background */
+    border: none;
+    padding: 0.7em 1.5em; /* Add more padding for a better button size */
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em; /* Increase font size */
+    border-radius: 5px; /* Rounded corners for buttons */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+  .button:hover {
+      background-color: #1abc9c; /* Change color on hover */
+      transform: scale(1.05); /* Slightly enlarge the button on hover */
   }
 
-  button {
-    padding: 0.5em 1em;
-    background-color: #ff3e00;
-    color: white;
-    border: none;
-    cursor: pointer;
+  .button:active {
+      transform: scale(0.95); /* Slightly shrink the button when clicked */
+  }
+
+  .button:focus {
+      outline: none; /* Remove the default focus outline */
+      box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.5); /* Add a custom focus outline */
   }
 </style>

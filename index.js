@@ -5,6 +5,7 @@ import { initializeDeviceCommunication } from "./src/device-communication.js";
 import "./src/device-communication.js";
 import { authenticateUser } from "./src/database.js";
 import { addUser } from "./src/database.js";
+import { getUsersFromDatabase } from "./src/database.js";
 
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -50,6 +51,14 @@ app.on("ready", () => {
         }
       });
     });
+  });
+  ipcMain.handle('fetchUsers', async () => {
+    try {
+      const users = await getUsersFromDatabase(); // Fetch users from the database
+      return users; // Return the list of users
+    } catch (err) {
+      throw new Error('Failed to fetch users: ' + err.message);
+    }
   });
   // Initialize device communication
   initializeDeviceCommunication(mainWindow);
